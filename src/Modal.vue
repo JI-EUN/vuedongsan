@@ -3,10 +3,11 @@
         <div class="white-bg">
             <h4>{{ rommdata[clickNum].title }}</h4>
             <img :src="rommdata[clickNum].image" alt="">
-            <p>{{ rommdata[clickNum].price }}원</p>
             <p>{{ rommdata[clickNum].content }}</p>
-
-            <!-- <button @click="modal()">모달 닫기</button> -->
+            <!-- <input type="text" @input="month = $event.target.value"/> -->
+            <input v-model="month">
+            <p>{{month}}개월 = {{ rommdata[clickNum].price * month}}원</p>
+            <button @click="$emit('closeModal')">모달 닫기</button>
         </div>
     </div>
 
@@ -15,6 +16,11 @@
 <script>
 export default {
     name: 'Modal',
+    data(){
+        return{
+            month:1,
+        }
+    },
     props:{
         rommdata: Object,
         clickNum:Number,

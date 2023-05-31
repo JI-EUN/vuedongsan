@@ -1,30 +1,27 @@
 <template>
-  <Modal :rommdata="rommdata" :clickNum="clickNum" :modalshow="modalshow"/>
+  <Modal @closeModal="modal()" :rommdata="rommdata" :clickNum="clickNum" :modalshow="modalshow"/>
   <div class="menu">
     <a v-for="(Links,i) in menu" :key="i" href="">{{ Links }}</a>
   </div>
 
-  <Discount />
+  <Discount/>
 
+  <Card @openModal="modal($event)" v-for="(lists, i) in rommdata" :key="i" :lists="lists" :number="i"/>
 
-  <div v-for="(lists, i) in rommdata" :key="i">
-    <img :src="lists.image" alt="">
-    <h4 @click="modal(i)">{{ lists.title }}</h4>
-    <p>{{ lists.price }}원</p>
-    <!-- <button @click="increase(i)">허위매물신고</button> <span>신고수 : {{ count[i] }}</span> -->
-  </div>
 </template>
 
 <script>
 import data from './assets/data';
 import Discount from './Discount';
 import Modal from './Modal';
+import Card from './Card';
 
 export default {
   name: 'App',
   //데이터 보관함 (중요 변수들)
   data(){
     return{
+      object:{name:'kim',age:20},
       clickNum :0,
       rommdata: data,
       modalshow:false,
@@ -40,7 +37,7 @@ export default {
       this.count[i]++
     },
     modal(i){
-      this.clickNum = i
+      this.clickNum = i;
       if(this.modalshow){
         this.modalshow = false;
       }else{
@@ -50,7 +47,8 @@ export default {
   },
   components: {
     Discount,
-    Modal
+    Modal,
+    Card
   }
 }
 </script>
