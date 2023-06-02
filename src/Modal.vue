@@ -21,6 +21,17 @@ export default {
             month:1,
         }
     },
+    watch:{
+        month(a){
+            if(a >= 13){
+                alert('13이상 입력 ㄴㄴ')
+            }else if(isNaN(a)){
+                alert('글자입력 ㄴㄴ')
+                this.month = 1;
+
+            }
+        }
+    },
     props:{
         rommdata: Object,
         clickNum:Number,

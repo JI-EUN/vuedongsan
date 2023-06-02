@@ -1,11 +1,18 @@
 <template>
-  <Modal @closeModal="modal()" :rommdata="rommdata" :clickNum="clickNum" :modalshow="modalshow"/>
+  <!-- <div class="start" :class="{end: modalshow }">
+    <Modal @closeModal="modal()" :rommdata="rommdata" :clickNum="clickNum" :modalshow="modalshow"/>
+  </div> -->
+  <Transition name="fade">
+    <Modal @closeModal="modal()" :rommdata="rommdata" :clickNum="clickNum" :modalshow="modalshow"/>
+  </Transition>
+
   <div class="menu">
     <a v-for="(Links,i) in menu" :key="i" href="">{{ Links }}</a>
   </div>
 
-  <Discount/>
-
+  <Discount v-if="showDiscount" :percent ="percent"/>
+  <button @click="priceSort">가격 순 정렬</button>
+  <button @click="sortBack">되돌리기</button>
   <Card @openModal="modal($event)" v-for="(lists, i) in rommdata" :key="i" :lists="lists" :number="i"/>
 
 </template>
@@ -21,6 +28,8 @@ export default {
   //데이터 보관함 (중요 변수들)
   data(){
     return{
+      showDiscount: true,
+      originRoomData: [...data],
       object:{name:'kim',age:20},
       clickNum :0,
       rommdata: data,
@@ -28,6 +37,7 @@ export default {
       count:[0,0,0],
       price1 : 80,
       price2: 70,
+      percent:30,
       menu:['Home','Shop','About'],
       products:['역삼동 원룸', '천호동 원룸', '중구 원룸']
     }
@@ -43,7 +53,25 @@ export default {
       }else{
         this.modalshow = true;
       }
+    },
+    priceSort(){
+      this.rommdata.sort(function(a,b){
+        return a.price - b.price
+      })
+    },
+    sortBack(){
+      this.rommdata = [...this.originRoomData];
     }
+  },
+  mounted(){
+    setInterval(()=>{
+      if (this.percent === 0) {
+        return
+      }else{
+        this.percent = this.percent - 1
+        return this.percent
+      }
+    },1000)
   },
   components: {
     Discount,
@@ -54,6 +82,26 @@ export default {
 </script>
 
 <style>
+.fade-leave-from{
+    opacity: 1;
+}
+.fade-leave-active{
+  transition: all .5s;
+}
+.fade-leave-to{
+    opacity: 0;
+}
+
+.fade-enter-from{
+    opacity: 0;
+}
+.fade-enter-active{
+  transition: all .5s;
+}
+.fade-enter-to{
+    opacity: 1;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -94,5 +142,12 @@ img{
 .menu a {
   color : white;
   padding : 10px;
+}
+.start{
+  opacity: 0;
+  transition: all .5s;
+}
+.end{
+  opacity: 1;
 }
 </style>
